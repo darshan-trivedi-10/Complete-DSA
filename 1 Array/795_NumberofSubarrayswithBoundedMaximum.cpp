@@ -8,17 +8,30 @@ using ll = long long;
 class Solution
 {
 public:
-    int numSubarrayBoundedMax(vector<int> &nums, int left, int right)
+    int numSubarrayBoundedMax(vector<int> &arr, int left, int right)
     {
-        // 2 ---> 8
-        // 2 9 2 5 6
-        // 2, 2 5 6
-        // 1, 2 , 2 5 , 256 5 56 6
-        // 3 4 / 2
-        
-        
-   
+        int n = arr.size();
+        int totalSubarray = 0;
+        int s = 0, count = 0;
+        for (int i = 0; i < n; i++)
+        {
+            if (arr[i] >= left && arr[i] <= right)
+            {
+                count = i - s + 1;
+                totalSubarray += count;
+            }
+            else if (arr[i] < left)
+            {
+                totalSubarray += count;
+            }
+            else
+            {
+                s = i + 1;
+                count = 0;
+            }
+        }
 
+        return totalSubarray;
     }
 };
 
