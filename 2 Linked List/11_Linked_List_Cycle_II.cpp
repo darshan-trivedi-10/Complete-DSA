@@ -19,18 +19,42 @@ class Solution
 public:
     ListNode *detectCycle(ListNode *head)
     {
-        unordered_map<ListNode *, int> mpp;
-        int idx = 0;
+        unordered_set<ListNode *> st;
         ListNode *temp = head;
         while (temp != NULL)
         {
-            if (mpp.find(temp) != mpp.end())
+            if (st.find(temp) != st.end())
             {
                 return temp;
             }
-            mpp[temp] = idx;
+            st.insert(temp);
             temp = temp->next;
-            idx++;
+        }
+
+        return NULL;
+    }
+};
+
+class Solution
+{
+public:
+    ListNode *detectCycle(ListNode *head)
+    {
+        ListNode *slow = head, *fast = head, *entery = head;
+        while (fast->next != NULL and fast->next->next != NULL)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if (slow == fast)
+            {
+                while (slow != entery)
+                {
+                    slow = slow->next;
+                    entery = entery->next;
+                }
+                return entery;
+            }
         }
 
         return NULL;
