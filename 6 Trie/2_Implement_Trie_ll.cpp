@@ -9,7 +9,8 @@ struct Node
 {
 
     Node *links[26];
-    bool flag = false;
+    int cntEndWith = 0;
+    int cntPrefix = 0;
 
     bool isContainKey(char ch)
     {
@@ -26,14 +27,34 @@ struct Node
         return links[ch - 'a'];
     }
 
-    void setEnd()
+    void increseEnd()
     {
-        flag = true;
+        cntEndWith++;
     }
 
-    bool isEnd()
+    void increasePrefix()
     {
-        return flag;
+        cntPrefix++;
+    }
+
+    void deleteEnd()
+    {
+        cntEndWith--;
+    }
+
+    void reducePrefix()
+    {
+        cntPrefix--;
+    }
+
+    int getEnd()
+    {
+        return cntEndWith;
+    }
+
+    int getPrefix()
+    {
+        return cntPrefix;
     }
 };
 
@@ -59,21 +80,55 @@ public:
             }
 
             temp = temp->get(word[i]);
+            temp->increasePrefix();
         }
-
-        temp->setEnd();
+        temp->increseEnd();
     }
 
     int countWordsEqualTo(string &word)
     {
+        Node *temp = root;
+        for (int i = 0; i < word.size(); i++)
+        {
+            if (temp->isContainKey(word[i]) == false)
+            {
+                return 0;
+            }
+
+            temp = temp->get(word[i]);
+        }
+        return temp->getEnd();
     }
 
     int countWordsStartingWith(string &word)
     {
+        Node *temp = root;
+        for (int i = 0; i < word.size(); i++)
+        {
+            if (temp->isContainKey(word[i]) == false)
+            {
+                return 0;
+            }
+
+            temp = temp->get(word[i]);
+        }
+        return temp->getPrefix();
     }
 
     void erase(string &word)
     {
+        Node *temp = root;
+        for (int i = 0; i < word.size(); i++)
+        {
+            if (temp->isContainKey(word[i]) == false)
+            {
+                return;
+            }
+            temp = temp->get(word[i]);
+            temp->reducePrefix();
+        }
+
+        temp->deleteEnd();
     }
 };
 
